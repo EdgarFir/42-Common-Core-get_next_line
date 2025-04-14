@@ -1,6 +1,6 @@
 When writing your tests, remember that:
- 1) Both the buffer size and the line size can be of very different
- values.
- 2) A file descriptor does not only point to regular files.
- Be thorough and cross-check your work with your peers. Prepare a
- comprehensive set of diverse tests for the defense.
+1) Both the buffer size and the line size can be of very different
+values.
+2) A file descriptor does not only point to regular files.
+Be thorough and cross-check your work with your peers. Prepare a
+comprehensive set of diverse tests for the defense.

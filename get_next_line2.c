@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 00:12:33 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/14 02:10:00 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/14 02:54:01 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char	*create_line(t_lines *line, int total)
 		actual_len += content_len;
 		line = line->next;
 	}
-	printf("%i\n", actual_len);
+	//printf("%i\n", actual_len);
 	created_line[actual_len] = '\0';
 	return (created_line);
 }
@@ -145,17 +145,17 @@ char *get_next_line(int fd)
 	int		new_line_i;
 	int		total;
 
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
 	line = NULL;
 	remainder = NULL;
 	total = 0;
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
 	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)))
 	{
 		new_line_i = search_new_line(buffer);
 		if (new_line_i >= 0)
-			buffer[new_line_i] = '\0';
+			buffer[new_line_i + 1] = '\0';
 		else
 			buffer[bytes_read] = '\0';
 		new_node = create_struct(buffer);
@@ -165,16 +165,15 @@ char *get_next_line(int fd)
 		if (new_line_i >= 0)
 		{
 			total += new_line_i;
-			remainder = ft_strdup(buffer + new_line_i);
-			return (create_line(line, total));
+			//remainder = ft_strdup(buffer + new_line_i);
 		}
-		total += bytes_read;
-		if (bytes_read < BUFFER_SIZE)
-			return (create_line(line, total));
+		else
+			total += bytes_read;
+		return (create_line(line, total));
 	}
 	//create_line(line, total);
-	printf("tOTAL: %i\n", total);
-	return (create_line(line, total));
+	//printf("tOTAL: %i\n", total);
+	return (NULL);
 }
 
 int main(int argc, char *argv[])
@@ -184,6 +183,6 @@ int main(int argc, char *argv[])
 	char *s;
 	while ((s = get_next_line(fd)))
 	{
-		printf("%s\n", s);
-	}	
+		printf("%s", s);
+	}
 }
