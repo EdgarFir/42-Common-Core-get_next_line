@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 00:12:33 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/14 02:54:01 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:17:51 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,43 @@ char	*ft_strdup(const char *s)
 	new_s[i] = '\0';
 	return (new_s);
 }
-t_lines *create_struct(char *buffer)
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t			i;
+	unsigned char	*dest_p;
+	unsigned char	*src_p;
+
+	if (!dest && !src)
+		return (NULL);
+	dest_p = (unsigned char *)dest;
+	src_p = (unsigned char *)src;
+	i = 0;
+	while (i < n)
+	{
+		dest_p[i] = src_p[i];
+		i++;
+	}
+	return (dest);
+}
+t_lines *create_struct(char *remainded, char *buffer)
 {
 	t_lines *new_node;
+	char *new_content;
 
 	new_node = (t_lines *)malloc(sizeof(t_lines));
 	if (!new_node)
 		return (NULL);
-	new_node->content = ft_strdup(buffer);
+	if (remainded)
+	{
+		new_content = malloc(sizeof(char) * (ft_strlen(remainded) + ft_strlen(buffer) + 1));
+		ft_memcpy(new_content, remainded, ft_strlen(remainded));
+		ft_memcpy(new_content + ft_strlen(remainded), buffer, ft_strlen(buffer));
+		new_content[ft_strlen(remainded) + ft_strlen(buffer)] = '\0';
+		new_node->content = new_content;
+	}
+	else
+		new_node->content = ft_strdup(buffer);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -93,24 +122,6 @@ int search_new_line(char *buffer)
 		i++;
 	}
 	return (-1);
-}
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	size_t			i;
-	unsigned char	*dest_p;
-	unsigned char	*src_p;
-
-	if (!dest && !src)
-		return (NULL);
-	dest_p = (unsigned char *)dest;
-	src_p = (unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		dest_p[i] = src_p[i];
-		i++;
-	}
-	return (dest);
 }
 
 char	*create_line(t_lines *line, int total)
@@ -158,14 +169,15 @@ char *get_next_line(int fd)
 			buffer[new_line_i + 1] = '\0';
 		else
 			buffer[bytes_read] = '\0';
-		new_node = create_struct(buffer);
+		new_node = create_struct(remainder, buffer);
 		if (!new_node)
 			return (NULL);
 		add_back(&line, new_node);
-		if (new_line_i >= 0)
+		if (new_line_i >= 0 && new_line_i < bytes_read - 1)
 		{
+			//printf("CARALHOOOOO!");
 			total += new_line_i;
-			//remainder = ft_strdup(buffer + new_line_i);
+			remainder = ft_strdup(buffer + new_line_i);
 		}
 		else
 			total += bytes_read;
