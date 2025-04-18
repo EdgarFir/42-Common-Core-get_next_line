@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:36:03 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 01:49:38 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 02:10:44 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*new_str;
@@ -87,4 +88,28 @@ char	*ft_strdup(const char *s)
 	}
 	new_s[i] = '\0';
 	return (new_s);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*sub_str;
+	size_t	s_len;
+
+	s_len = ft_strlen_chr(s, 0);
+	if (s_len < start)
+	{
+		sub_str = (char *)malloc(sizeof(char));
+		if (!sub_str)
+			return (NULL);
+		sub_str[0] = '\0';
+		return (sub_str);
+	}
+	if (len > s_len - start)
+		len = s_len - start;
+	sub_str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!sub_str)
+		return (NULL);
+	ft_memcpy(sub_str, s + start, len);
+	sub_str[len] = '\0';
+	return (sub_str);
 }

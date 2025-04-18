@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:54 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 01:51:37 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 02:09:35 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ char	*get_next_line(int fd)
 	if (new_line_i < (int)(ft_strlen_chr(buffer, 0) - 1))
 	{
 		remainder = ft_strdup(&buffer[new_line_i + 1]);
-		buffer[new_line_i + 1] = '\0';
-		line = ft_strdup(buffer);
+		line = ft_substr(buffer, 0, new_line_i + 1);
 		if (!remainder || !line)
 			return (clean_all(0, line, remainder));
 		free(buffer);
