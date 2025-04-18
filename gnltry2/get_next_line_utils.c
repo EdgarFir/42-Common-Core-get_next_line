@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:36:03 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 00:08:58 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:49:38 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ char	*ft_strdup(const char *s)
 	int		i;
 	int		len;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen_chr(s, 0);
 	new_s = (char *)malloc(sizeof(char) * (len + 1));
 	if (!new_s)

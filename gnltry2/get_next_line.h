@@ -6,13 +6,14 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:45 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 00:27:28 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:49:49 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 
 # define GET_NEXT_LINE_H
+
 
 
 #include <stdlib.h>
@@ -25,7 +26,7 @@ char	*ft_strdup(const char *s);
 size_t	ft_strlen_chr(const char *s, char c);
 char	*build_buffer(char *buffer, char *buffer_res, ssize_t bytes_read);
 int		has_new_line(char *buffer_res);
-char *read_buffer(int fd, char *buffer);
+char	*read_buffer(int fd, char *buffer);
 char	*free_all(char *line, char *remainder, char *buffer);
 char	*clean_all(char *buffer, char *line, char *remainder);
 

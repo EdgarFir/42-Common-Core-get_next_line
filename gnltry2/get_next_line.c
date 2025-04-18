@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:54 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 00:41:09 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:51:37 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ char	*build_buffer(char *buffer, char *buffer_res, ssize_t bytes_read)
 	if (!buffer)
 		return (ft_strdup(buffer_res));
 	temp = ft_strjoin(buffer, buffer_res);
-	if (!temp)
-	{
-		free(buffer);
-		return (NULL);
-	}
 	free(buffer);
 	buffer = temp;
 	return (buffer);
@@ -50,31 +45,33 @@ char	*read_buffer(int fd, char *buffer)
 	bytes_read = 1;
 	buffer_res = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer_res)
-	{
-		if (buffer)
-			free(buffer);
 		return (NULL);
-	}
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer_res, BUFFER_SIZE);
-		if (bytes_read < 0 || (!bytes_read && !buffer))
-			break ;
+		if (bytes_read < 0)
+		{
+			free(buffer_res);
+			free(buffer);
+			return (NULL);
+		}
 		if (!bytes_read)
 			break ;
 		buffer = build_buffer(buffer, buffer_res, bytes_read);
 		if (!buffer || has_new_line(buffer_res))
 			break ;
 	}
-	if (buffer_res)
-		free(buffer_res);
+	free(buffer_res);
 	return (buffer);
 }
 
 char	*clean_all(char *buffer, char *line, char *remainder)
 {
 	if (buffer)
+	{
 		free(buffer);
+		buffer = NULL;
+	}
 	if (line)
 		free(line);
 	if (remainder)
@@ -92,8 +89,8 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_buffer(fd, buffer);
-	if (!buffer || !buffer[0])
-		return (clean_all(buffer, 0, 0));
+	if (!buffer)
+		return (NULL);
 	new_line_i = ft_strlen_chr(buffer, '\n');
 	if (new_line_i < (int)(ft_strlen_chr(buffer, 0) - 1))
 	{
@@ -101,7 +98,7 @@ char	*get_next_line(int fd)
 		buffer[new_line_i + 1] = '\0';
 		line = ft_strdup(buffer);
 		if (!remainder || !line)
-			return (clean_all(buffer, line, remainder));
+			return (clean_all(0, line, remainder));
 		free(buffer);
 		buffer = remainder;
 		return (line);
@@ -120,8 +117,8 @@ int main()
 	while ((s = get_next_line(fd)))
 	{
 		printf("LINE: %s", s);
-		free(s);
 	}
+	printf("%s\n", s);
 	close(fd);
 }
 */
