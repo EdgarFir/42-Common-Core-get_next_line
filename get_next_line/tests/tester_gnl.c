@@ -130,6 +130,20 @@ int main()
 	errors += test_gnl(fd, NULL, 11, "End of file.");
 	close(fd);
 
+	printf("============ giantline.txt ============\n");
+	// Read file to expected
+	fd = open("giantline.txt", O_RDONLY);
+	char expected[20000 + 1] = {0};
+	read(fd, expected, 20000);
+	expected[20000] = '\0';
+	close(fd);
+
+	fd = open("giantline.txt", O_RDONLY);
+	errors += test_gnl(fd, expected, 10, "Giant line.");
+	errors += test_gnl(fd, NULL, 11, "End of file.");
+	errors += test_gnl(fd, NULL, 11, "End of file.");
+	close(fd);
+
 	if (errors)
 		printf("\033[0;31mSomething is wrong! Check test!\033[0m\n");
 	else

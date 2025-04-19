@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:54 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/19 01:08:00 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/19 02:23:14 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*read_buffer(int fd, char *buffer)
 	bytes_read = 1;
 	buffer_res = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer_res)
-		return (NULL);
+		return (clean_all(buffer, buffer_res, NULL));
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer_res, BUFFER_SIZE);
@@ -64,14 +64,23 @@ char	*read_buffer(int fd, char *buffer)
 	return (buffer);
 }
 
-char	*clean_all(char *buffer, char *line, char *remainder)
+char	*clean_all(char *buffer1, char *buffer2, char *buffer3)
 {
-	if (buffer)
-		free(buffer);
-	if (line && line != buffer && line != remainder)
-		free(line);
-	if (remainder && remainder != buffer && remainder != line)
-		free(remainder);
+	if (buffer1)
+	{
+		free(buffer1);
+		buffer1 = NULL;
+	}
+	if (buffer2)
+	{
+		free(buffer2);
+		buffer2 = NULL;
+	}
+	if (buffer3)
+	{
+		free(buffer3);
+		buffer3 = NULL;
+	}
 	return (NULL);
 }
 
@@ -79,27 +88,25 @@ char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*line;
-	char		*remainder;
-	int			new_line_i;
+	char		*rem;
+	int			nl_i;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_buffer(fd, buffer);
 	if (!buffer || !buffer[0])
-		return (clean_all(buffer, 0, 0));
-	new_line_i = ft_strlen_chr(buffer, '\n');
-	if (new_line_i < (int)(ft_strlen_chr(buffer, 0) - 1))
+		return (clean_all(buffer, NULL, NULL));
+	nl_i = ft_strlen_chr(buffer, '\n');
+	if (nl_i < (int)(ft_strlen_chr(buffer, 0) - 1))
 	{
-		remainder = ft_strdup(&buffer[new_line_i + 1]);
-		line = ft_substr(buffer, 0, new_line_i + 1);
-		if (!remainder || !line)
-			return (clean_all(0, line, remainder));
+		rem = ft_strdup(&buffer[nl_i + 1]);
+		line = ft_substr(buffer, 0, nl_i + 1);
+		if (!rem || !line)
+			return (free(buffer), buffer = NULL, clean_all(0, rem, line));
 		free(buffer);
-		buffer = remainder;
+		buffer = rem;
 		return (line);
 	}
 	line = ft_strdup(buffer);
-	free(buffer);
-	buffer = NULL;
-	return (line);
+	return (free(buffer), buffer = NULL, line);
 }

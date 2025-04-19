@@ -6,14 +6,13 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:45 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/19 01:09:54 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/19 02:19:16 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 
 # define GET_NEXT_LINE_H
-# define BUFFER_SIZE 1
 
 # include <stdlib.h>
 # include <unistd.h>
