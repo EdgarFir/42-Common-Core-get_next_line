@@ -6,12 +6,11 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 10:59:54 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 02:09:35 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/19 01:08:00 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*build_buffer(char *buffer, char *buffer_res, ssize_t bytes_read)
 {
@@ -28,6 +27,8 @@ char	*build_buffer(char *buffer, char *buffer_res, ssize_t bytes_read)
 
 int	has_new_line(char *buffer_res)
 {
+	if (!buffer_res)
+		return (0);
 	while (*buffer_res)
 	{
 		if (*buffer_res == '\n')
@@ -50,15 +51,13 @@ char	*read_buffer(int fd, char *buffer)
 	{
 		bytes_read = read(fd, buffer_res, BUFFER_SIZE);
 		if (bytes_read < 0)
-		{
-			free(buffer_res);
-			free(buffer);
-			return (NULL);
-		}
+			return (clean_all(buffer, buffer_res, 0));
 		if (!bytes_read)
 			break ;
 		buffer = build_buffer(buffer, buffer_res, bytes_read);
-		if (!buffer || has_new_line(buffer_res))
+		if (!buffer)
+			break ;
+		if (has_new_line(buffer_res))
 			break ;
 	}
 	free(buffer_res);
@@ -68,13 +67,10 @@ char	*read_buffer(int fd, char *buffer)
 char	*clean_all(char *buffer, char *line, char *remainder)
 {
 	if (buffer)
-	{
 		free(buffer);
-		buffer = NULL;
-	}
-	if (line)
+	if (line && line != buffer && line != remainder)
 		free(line);
-	if (remainder)
+	if (remainder && remainder != buffer && remainder != line)
 		free(remainder);
 	return (NULL);
 }
@@ -89,8 +85,8 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_buffer(fd, buffer);
-	if (!buffer)
-		return (NULL);
+	if (!buffer || !buffer[0])
+		return (clean_all(buffer, 0, 0));
 	new_line_i = ft_strlen_chr(buffer, '\n');
 	if (new_line_i < (int)(ft_strlen_chr(buffer, 0) - 1))
 	{
@@ -107,17 +103,3 @@ char	*get_next_line(int fd)
 	buffer = NULL;
 	return (line);
 }
-/*
-#include <fcntl.h>
-int main()
-{
-	int fd = open("test.txt", O_RDONLY);
-	char *s;
-	while ((s = get_next_line(fd)))
-	{
-		printf("LINE: %s", s);
-	}
-	printf("%s\n", s);
-	close(fd);
-}
-*/

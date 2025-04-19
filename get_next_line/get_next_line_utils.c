@@ -6,7 +6,7 @@
 /*   By: edfreder <edfreder@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:36:03 by edfreder          #+#    #+#             */
-/*   Updated: 2025/04/18 02:10:44 by edfreder         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:59:05 by edfreder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char	*sub_str;
 	size_t	s_len;
 
+	if (!s || !len)
+		return (NULL);
 	s_len = ft_strlen_chr(s, 0);
 	if (s_len < start)
 	{
