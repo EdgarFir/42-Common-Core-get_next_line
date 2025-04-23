@@ -1,4 +1,10 @@
-============ BUFFER_SIZE=1 ============
+============ BUFFER_SIZE=42 ============
+
+============ Reading invalid_file.txt ============
+Testing: Invalid file.
+Test 1. -> [0;32mOK![0m 
+-> Expected: (null)
+-> Output:   (null)
 
 ============ empty.txt ============
 Testing: Empty file.

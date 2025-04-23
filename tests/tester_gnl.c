@@ -63,40 +63,45 @@ int main()
 	
 	printf("============ BUFFER_SIZE=%i ============\n\n", BUFFER_SIZE);
 
+	printf("============ Reading invalid_file.txt ============\n");
+	fd = open("files/invalid_file.txt", O_RDONLY);
+	errors += test_gnl(fd, NULL, 1, "Invalid file.");
+	close(fd);
+
 	printf("============ empty.txt ============\n");
-	fd = open("empty.txt", O_RDONLY);
+	fd = open("files/empty.txt", O_RDONLY);
 	errors += test_gnl(fd, NULL, 1, "Empty file.");
 	errors += test_gnl(fd, NULL, 2, 0);
 	printf("\n");
 	close(fd);
 
 	printf("============ onechar.txt ============\n");
-	fd = open("onechar.txt", O_RDONLY);
+	fd = open("files/onechar.txt", O_RDONLY);
 	errors += test_gnl(fd, "a", 1, "One char no line.");
 	errors += test_gnl(fd, NULL, 2, "End of file.");
 	close(fd);
 
 	printf("============ onlyline.txt ============\n");
-	fd = open("onlyline.txt", O_RDONLY);
+	fd = open("files/onlyline.txt", O_RDONLY);
 	errors += test_gnl(fd, "aaaaaaaaaaaaaa", 1, "One line.");
 	errors += test_gnl(fd, NULL, 2, "End of file.");
 	close(fd);
 
 	printf("============ bigline.txt ============\n");
-	fd = open("bigline.txt", O_RDONLY);
+	fd = open("files/bigline.txt", O_RDONLY);
 	errors += test_gnl(fd, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 1, "One big line.");
 	errors += test_gnl(fd, NULL, 2, "End of file.");
 	close(fd);
 
 	printf("============ onlyNL.txt ============\n");
-	fd = open("onlyNL.txt", O_RDONLY);
+	fd = open("files/onlyNL.txt", O_RDONLY);
 	errors += test_gnl(fd, ".", 1, "One new line.");
 	errors += test_gnl(fd, NULL, 2, "End of file.");
 	close(fd);
 
 	printf("============ multipleNL.txt ============\n");
 	printf("============ \\n\\ = '.' ============\n");
-	fd = open("multipleNL.txt", O_RDONLY);
+	fd = open("files/multipleNL.txt", O_RDONLY);
 	errors += test_gnl(fd, ".", 1, "New line.");
 	errors += test_gnl(fd, ".", 2, "Other new line.");
 	errors += test_gnl(fd, ".", 3, "Other new line.");
@@ -109,14 +114,14 @@ int main()
 
 	printf("============ bigNL.txt ============\n");
 	printf("============ \\n\\ = '.' ============\n");
-	fd = open("bigNL.txt", O_RDONLY);
+	fd = open("files/bigNL.txt", O_RDONLY);
 	errors += test_gnl(fd, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.", 1, "One big new line.");
 	errors += test_gnl(fd, NULL, 2, "End of file.");
 	close(fd);
 
 	printf("============ randomNL.txt ============\n");
 	printf("============ \\n\\ = '.' ============\n");
-	fd = open("randomNL.txt", O_RDONLY);
+	fd = open("files/randomNL.txt", O_RDONLY);
 	errors += test_gnl(fd, "0123456789.", 1, "First random new line.");
 	errors += test_gnl(fd, "012345678.", 2, "Other random new line.");
 	errors += test_gnl(fd, "01234567.", 3, "Other random new line.");
@@ -132,13 +137,13 @@ int main()
 
 	printf("============ giantline.txt ============\n");
 	// Read file to expected
-	fd = open("giantline.txt", O_RDONLY);
+	fd = open("files/giantline.txt", O_RDONLY);
 	char expected[20000 + 1] = {0};
 	read(fd, expected, 20000);
 	expected[20000] = '\0';
 	close(fd);
 
-	fd = open("giantline.txt", O_RDONLY);
+	fd = open("files/giantline.txt", O_RDONLY);
 	errors += test_gnl(fd, expected, 10, "Giant line.");
 	errors += test_gnl(fd, NULL, 11, "End of file.");
 	errors += test_gnl(fd, NULL, 11, "End of file.");
